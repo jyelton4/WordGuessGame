@@ -113,17 +113,17 @@
         }, 
         // method to array-ify letters of chosen word 
         arrayify: function () {
+            letters = [];
             for (i = 0; i < chosenWord.length; i++) {
                letters.push(chosenWord[i]); 
             }
         }, 
         // method to create html elements (dashes) for number of letters in word
         createDashesHTML: function () {
-            var dashesHTML = document.getElementById("dashed-word");
-            while (dashesHTML.firstChild) {
-                dashesHTML.removeChild(dashesHTML.firstChild);
-                console.log('god dammit');
-            }
+            document.getElementById("dashed-word").innerHTML = '';
+            correct = [];
+            wrong = [];
+
             letters.forEach(function(item) {
                 var dash = document.createElement("BUTTON");
                 dash.textContent = "_";
@@ -165,13 +165,21 @@
                 document.getElementById("guess-counter").textContent = '0';
             }   
         }, 
+        // method to check for repeat letters in word 
+        repeatLetterCounter: function() {
+            var repeatLetter = letters.filter(item => item == keystroke);
+            // console.log(repeatLetter);
+            console.log(repeatLetter.length);
+            return repeatLetter.length;
+        }, 
         // method to log correct guesses
         logCorrect: function(keystroke) {
+            var letterCount = wordGuessGame.repeatLetterCounter();
             if (correct.indexOf(keystroke) === -1 && wordGuessGame.alphaChar.indexOf(keystroke) != -1) {
                 correct.push(keystroke);
                 wordGuessGame.correctGuessesHTML(keystroke);
-            } else if (correct.indexOf(keystroke) != -1 && letters.indexOf(keystroke) != -1) {
-                correct.push(keystroke);
+            } else if (letterCount > 1) {
+                // correct.push(keystroke);
                 wordGuessGame.correctGuessesHTML(keystroke);
             }
         }, 
@@ -240,4 +248,4 @@
         }
     }
 
-    alert("Press the space bar to start.");
+    // alert("Press the space bar to start.");
